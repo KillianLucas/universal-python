@@ -5,6 +5,22 @@ Start-Sleep -Seconds 2
 Write-Output "This will take approximately 5 minutes..."
 Start-Sleep -Seconds 2
 
+# Check if Git is installed
+if (Get-Command git -ErrorAction SilentlyContinue) {
+    Write-Host "Git is already installed."
+} else {
+    # Check if Chocolatey is installed
+    if (-Not (Get-Command choco -ErrorAction SilentlyContinue)) {
+        # Install Chocolatey
+        Set-ExecutionPolicy Bypass -Scope Process -Force
+        [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+        iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+    }
+
+    # Install Git using Chocolatey
+    choco install git.install -y
+}
+
 # Check if pyenv is installed
 $pyenvRoot = "${env:USERPROFILE}\.pyenv\pyenv-win"
 $pyenvBin = "$pyenvRoot\bin\pyenv.bat"

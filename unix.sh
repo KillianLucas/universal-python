@@ -11,6 +11,37 @@ pyenv_root="$HOME/.pyenv/bin/pyenv"
 
 #!/bin/bash
 
+# Check if Git is installed
+if command -v git >/dev/null; then
+    echo "Git is already installed."
+else
+    # Detect the operating system
+    OS="$(uname -s)"
+
+    case "$OS" in
+        Linux)
+            # Assume a Debian-based or Fedora-based system
+            if command -v apt >/dev/null; then
+                echo "Installing Git on Debian-based Linux..."
+                sudo apt install git-all
+            elif command -v dnf >/dev/null; then
+                echo "Installing Git on Fedora-based Linux..."
+                sudo dnf install git-all
+            else
+                echo "Package manager not supported. Please install Git manually."
+            fi
+            ;;
+        Darwin)
+            echo "Installing Git on macOS..."
+            # Install Git using Xcode Command Line Tools
+            xcode-select --install
+            ;;
+        *)
+            echo "Unsupported OS: $OS"
+            ;;
+    esac
+fi
+
 echo "Starting installation of pyenv..."
 
 INSTALL_URL="https://pyenv.run"
