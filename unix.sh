@@ -14,13 +14,14 @@ if ! command -v $pyenv_root &> /dev/null
 then
     echo "pyenv is not installed. Installing now..."
 
-    # Try to install pyenv using curl, if it fails, use wget
-    if ! curl -L https://pyenv.run | sh; then
-        echo "curl failed, trying wget..."
-        if ! wget -O- https://pyenv.run | sh; then
-            echo "Installation failed with both curl and wget. Please check your network connection and try again."
-            exit 1
-        fi
+    # Check for curl and use it if available; otherwise, use wget
+    if command -v curl &> /dev/null; then
+        curl -L https://pyenv.run | sh
+    elif command -v wget &> /dev/null; then
+        wget -O- https://pyenv.run | sh
+    else
+        echo "Neither curl nor wget is available. Please install one of these to continue."
+        exit 1
     fi
 else
     echo "pyenv is already installed."
