@@ -13,16 +13,49 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 
 # Install pyenv
 if ! command -v pyenv &> /dev/null; then
-    echo "Installing pyenv..."
+    echo "pyenv is not installed, proceeding with installation..."
+
+    # Check for curl
+    if ! command -v curl &> /dev/null; then
+        echo "curl is not available, checking for wget..."
+
+        # Check for wget
+        if ! command -v wget &> /dev/null; then
+            echo "wget is also not available, attempting to install curl..."
+
+            # Determine OS and install curl
+            os_name="$(uname -s)"
+            if [ "$os_name" = "Darwin" ]; then
+                echo "Installing curl on macOS..."
+                /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+                brew install curl
+            elif [ "$os_name" = "Linux" ]; then
+                echo "Installing curl on Linux..."
+                sudo apt-get update && sudo apt-get install -y curl
+            else
+                echo "Unsupported OS, cannot install curl automatically."
+                exit 1
+            fi
+
+            if ! command -v curl &> /dev/null; then
+                echo "Failed to install curl. Please manually install curl or wget to continue."
+                exit 1
+            fi
+        fi
+    fi
+
+    # Install pyenv using curl or wget
     if command -v curl &> /dev/null; then
+        echo "Installing pyenv using curl..."
         curl -L https://pyenv.run | sh
     elif command -v wget &> /dev/null; then
+        echo "Installing pyenv using wget..."
         wget -O- https://pyenv.run | sh
-    else
-        echo "Neither curl nor wget is available. Please install one of these to continue."
-        exit 1
     fi
+else
+    echo "pyenv is already installed."
 fi
+
 
 # Initialize pyenv after installation
 eval "$(pyenv init --path)"
