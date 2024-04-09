@@ -1,0 +1,61 @@
+name: Cross-Platform Test
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-10.15
+            script: ./unix.sh
+          - os: macos-11
+            script: ./unix.sh
+          - os: macos-12
+            script: ./unix.sh
+          - os: windows-2016
+            script: .\windows.ps1
+          - os: windows-2019
+            script: .\windows.ps1
+          - os: windows-2022
+            script: .\windows.ps1
+          - os: ubuntu-18.04
+            script: ./unix.sh
+          - os: ubuntu-20.04
+            script: ./unix.sh
+          - os: ubuntu-latest
+            script: ./unix.sh
+          # Using Docker for specific Linux distributions and versions
+          - os: ubuntu-latest
+            distro: debian:10
+            script: ./unix.sh
+          - os: ubuntu-latest
+            distro: debian:11
+            script: ./unix.sh
+          - os: ubuntu-latest
+            distro: centos:7
+            script: ./unix.sh
+          - os: ubuntu-latest
+            distro: centos:8
+            script: ./unix.sh
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Docker container
+      if: matrix.distro
+      uses: addnab/docker-run-action@v2
+      with:
+        image: ${{ matrix.distro }}
+        options: -v ${{ github.workspace }}:/workspace
+        run: |
+          cd /workspace
+          ${{ matrix.script }}
+
+    - name: Run script on macOS and Windows
+      if: matrix.os != 'ubuntu-latest' || matrix.distro == ''
+      run: ${{ matrix.script }}
+      shell: ${{ matrix.os == 'windows-latest' || matrix.os == 'windows-2019' || matrix.os == 'windows-2022' ? 'pwsh' : 'bash' }}
