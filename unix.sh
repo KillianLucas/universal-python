@@ -41,7 +41,7 @@ if [[ $installed_version != *"$python_version"* ]]; then
 fi
 
 # Use the specific Python version to install open-interpreter
-pyenv exec $python_version -m pip install open-interpreter
+pyenv exec python$python_version -m pip install open-interpreter
 
 echo "Open Interpreter has been installed. Run the following command to use it:"
 echo "interpreter"
