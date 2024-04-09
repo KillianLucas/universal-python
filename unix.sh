@@ -6,68 +6,76 @@ sleep 2
 echo "This will take approximately 5 minutes..."
 sleep 2
 
-# Define pyenv location and ensure it's in the PATH
-pyenv_root="$HOME/.pyenv"
-export PYENV_ROOT="$pyenv_root"
-export PATH="$PYENV_ROOT/bin:$PATH"
+# Define pyenv location
+pyenv_root="$HOME/.pyenv/bin/pyenv"
 
-# Install pyenv
-if ! command -v pyenv &> /dev/null; then
-    echo "pyenv is not installed, proceeding with installation..."
+#!/bin/bash
 
-    # Check for curl
-    if ! command -v curl &> /dev/null; then
-        echo "curl is not available, checking for wget..."
+echo "Starting installation of pyenv..."
 
-        # Check for wget
-        if ! command -v wget &> /dev/null; then
-            echo "wget is also not available, attempting to install curl..."
+INSTALL_URL="https://pyenv.run"
 
-            # Determine OS and install curl
-            os_name="$(uname -s)"
-            if [ "$os_name" = "Darwin" ]; then
-                echo "Installing curl on macOS..."
-                /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-                brew install curl
-            elif [ "$os_name" = "Linux" ]; then
-                echo "Installing curl on Linux..."
+# Check if pyenv is already installed
+if command -v pyenv &> /dev/null; then
+    echo "pyenv is already installed."
+else
+    # Try to download and install pyenv using available commands
+    if command -v curl &> /dev/null; then
+        echo "Using curl to download pyenv..."
+        curl -L "$INSTALL_URL" | sh
+    elif command -v wget &> /dev/null; then
+        echo "Using wget to download pyenv..."
+        wget -O- "$INSTALL_URL" | sh
+    elif command -v python &> /dev/null; then
+        echo "Using Python to download pyenv..."
+        python -c "import urllib.request; exec(urllib.request.urlopen('$INSTALL_URL').read())"
+    elif command -v perl &> /dev/null; then
+        echo "Using Perl to download pyenv..."
+        perl -e "use LWP::Simple; exec(get('$INSTALL_URL'))"
+    else
+        echo "Neither curl nor wget is available."
+        if [ "$(uname -s)" = "Linux" ]; then
+            echo "Linux detected. Attempting to install sudo and curl..."
+
+            # Check and install sudo if not present
+            if ! command -v sudo &> /dev/null; then
+                apt-get update && apt-get install -y sudo
+            fi
+
+            # Install curl using sudo
+            if command -v sudo &> /dev/null; then
                 sudo apt-get update && sudo apt-get install -y curl
+                if command -v curl &> /dev/null; then
+                    echo "Using curl to download pyenv..."
+                    curl -L "$INSTALL_URL" | sh
+                else
+                    echo "Failed to install curl. Installation of pyenv cannot proceed."
+                fi
             else
-                echo "Unsupported OS, cannot install curl automatically."
-                exit 1
+                echo "Unable to install sudo. Manual installation required."
             fi
-
-            if ! command -v curl &> /dev/null; then
-                echo "Failed to install curl. Please manually install curl or wget to continue."
-                exit 1
-            fi
+        else
+            echo "Failed to install curl. Installation of pyenv cannot proceed."
         fi
     fi
-
-    # Install pyenv using curl or wget
-    if command -v curl &> /dev/null; then
-        echo "Installing pyenv using curl..."
-        curl -L https://pyenv.run | sh
-    elif command -v wget &> /dev/null; then
-        echo "Installing pyenv using wget..."
-        wget -O- https://pyenv.run | sh
-    fi
-else
-    echo "pyenv is already installed."
 fi
+
+echo "Continuing with the rest of the script..."
+# Add additional script logic here
+
 
 
 # Initialize pyenv after installation
-eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
+eval "$($pyenv_root init --path)"
+eval "$($pyenv_root init -)"
 
 # Install Python and remember the version
 python_version=3.11.9
-pyenv install $python_version --skip-existing
-pyenv shell $python_version
+$pyenv_root install $python_version --skip-existing
+$pyenv_root shell $python_version
 
 # Explicitly use the installed Python version for commands
-installed_version=$(pyenv exec python --version)
+installed_version=$($pyenv_root exec python --version)
 echo "Installed Python version: $installed_version"
 if [[ $installed_version != *"$python_version"* ]]; then
     echo "Python $python_version was not installed correctly. Please open an issue at https://github.com/openinterpreter/universal-python/."
@@ -75,7 +83,7 @@ if [[ $installed_version != *"$python_version"* ]]; then
 fi
 
 # Use the specific Python version to install open-interpreter
-pyenv exec python -m pip install open-interpreter
+$pyenv_root exec python -m pip install open-interpreter
 
 echo "Open Interpreter has been installed. Run the following command to use it:"
 echo "interpreter"
