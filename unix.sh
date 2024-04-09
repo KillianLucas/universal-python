@@ -62,15 +62,15 @@ else
     if command -v curl &> /dev/null; then
         echo "Using curl to download pyenv..."
         curl -L "$INSTALL_URL" | sh
-    elif command -v wget &> /dev/null; then
-        echo "Using wget to download pyenv..."
-        wget -O- "$INSTALL_URL" | sh
-    elif command -v python &> /dev/null; then
-        echo "Using Python to download pyenv..."
-        python -c "import urllib.request; exec(urllib.request.urlopen('$INSTALL_URL').read())"
-    elif command -v perl &> /dev/null; then
-        echo "Using Perl to download pyenv..."
-        perl -e "use LWP::Simple; exec(get('$INSTALL_URL'))"
+    # elif command -v wget &> /dev/null; then
+    #     echo "Using wget to download pyenv..."
+    #     wget -O- "$INSTALL_URL" | sh
+    # elif command -v python &> /dev/null; then
+    #     echo "Using Python to download pyenv..."
+    #     python -c "import urllib.request; exec(urllib.request.urlopen('$INSTALL_URL').read())"
+    # elif command -v perl &> /dev/null; then
+    #     echo "Using Perl to download pyenv..."
+    #     perl -e "use LWP::Simple; exec(get('$INSTALL_URL'))"
     else
         echo "Neither curl nor wget is available."
         if [ "$(uname -s)" = "Linux" ]; then
