@@ -8,12 +8,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: macos-10.15
-            script: chmod +x ./unix.sh && ./unix.sh
-          - os: macos-11
-            script: chmod +x ./unix.sh && ./unix.sh
-          - os: macos-12
-            script: chmod +x ./unix.sh && ./unix.sh
+          # - os: macos-10.15
+          #   script: chmod +x ./unix.sh && ./unix.sh
+          # - os: macos-11
+          #   script: chmod +x ./unix.sh && ./unix.sh
+          # - os: macos-12
+          #   script: chmod +x ./unix.sh && ./unix.sh
           # - os: windows-2016
           #   script: powershell -ExecutionPolicy Bypass -File .\windows.ps1
           # - os: windows-2019
