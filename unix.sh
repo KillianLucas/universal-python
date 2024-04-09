@@ -18,11 +18,18 @@ else
     echo "pyenv is already installed."
 fi
 
-# Install Python 3.12 if not already installed
-$pyenv_root install 3.12 --skip-existing
+# Install Python 3.11 if not already installed
+$pyenv_root install 3.11 --skip-existing
+
+# Check Python version
+installed_version=$($pyenv_root exec python3.11 --version)
+if [[ $installed_version != *"3.11"* ]]; then
+    echo "Python 3.11 is not installed correctly."
+    exit 1
+fi
 
 # Use pyenv exec to run pip install with the installed Python version
-$pyenv_root exec python3.12 -m pip install open-interpreter
+$pyenv_root exec python3.11 -m pip install open-interpreter
 
 echo ""
 echo "Open Interpreter has been installed. Run the following command to use it: "
