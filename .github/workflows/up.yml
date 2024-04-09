@@ -57,4 +57,3 @@ jobs:
     - name: Run script on non-Docker environments
       if: matrix.distro == ''
       run: ${{ matrix.script }}
-      shell: ${{ contains(matrix.os, 'windows') && 'pwsh' || 'bash' }}
