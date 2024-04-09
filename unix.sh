@@ -23,10 +23,18 @@ else
             # Assume a Debian-based or Fedora-based system
             if command -v apt >/dev/null; then
                 echo "Installing Git on Debian-based Linux..."
-                sudo apt install git-all
+                # Check and install sudo if not present
+                if ! command -v sudo &> /dev/null; then
+                    apt-get update && apt-get install -y sudo
+                fi
+                sudo apt install -y git-all
             elif command -v dnf >/dev/null; then
                 echo "Installing Git on Fedora-based Linux..."
-                sudo dnf install git-all
+                # Check and install sudo if not present
+                if ! command -v sudo &> /dev/null; then
+                    dnf install -y sudo
+                fi
+                sudo dnf install -y git-all
             else
                 echo "Package manager not supported. Please install Git manually."
             fi
