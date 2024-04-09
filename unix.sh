@@ -13,7 +13,15 @@ pyenv_root="$HOME/.pyenv/bin/pyenv"
 if ! command -v $pyenv_root &> /dev/null
 then
     echo "pyenv is not installed. Installing now..."
-    curl https://pyenv.run | zsh #zsh is the default shell for mac now. Changing this may cause install to fail 
+
+    # Try to install pyenv using curl, if it fails, use wget
+    if ! curl -L https://pyenv.run | sh; then
+        echo "curl failed, trying wget..."
+        if ! wget -O- https://pyenv.run | sh; then
+            echo "Installation failed with both curl and wget. Please check your network connection and try again."
+            exit 1
+        fi
+    fi
 else
     echo "pyenv is already installed."
 fi
@@ -31,7 +39,5 @@ fi
 # Use pyenv exec to run pip install with the installed Python version
 $pyenv_root exec python3.11 -m pip install open-interpreter
 
-echo ""
-echo "Open Interpreter has been installed. Run the following command to use it: "
-echo ""
+echo "Open Interpreter has been installed. Run the following command to use it:"
 echo "interpreter"
