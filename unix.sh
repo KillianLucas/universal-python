@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 echo "Starting Open Interpreter installation..."
 sleep 2

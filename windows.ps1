@@ -1,3 +1,5 @@
+$ErrorActionPreference = 'Stop'
+
 Write-Output "Starting Open Interpreter installation..."
 Start-Sleep -Seconds 2
 Write-Output "This will take approximately 5 minutes..."
