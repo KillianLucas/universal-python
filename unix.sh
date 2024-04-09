@@ -6,15 +6,14 @@ sleep 2
 echo "This will take approximately 5 minutes..."
 sleep 2
 
-# Define pyenv location
-pyenv_root="$HOME/.pyenv/bin/pyenv"
+# Define pyenv location and ensure it's in the PATH
+pyenv_root="$HOME/.pyenv"
+export PYENV_ROOT="$pyenv_root"
+export PATH="$PYENV_ROOT/bin:$PATH"
 
-# Check if pyenv is installed
-if ! command -v $pyenv_root &> /dev/null
-then
-    echo "pyenv is not installed. Installing now..."
-
-    # Check for curl and use it if available; otherwise, use wget
+# Install pyenv
+if ! command -v pyenv &> /dev/null; then
+    echo "Installing pyenv..."
     if command -v curl &> /dev/null; then
         curl -L https://pyenv.run | sh
     elif command -v wget &> /dev/null; then
@@ -23,22 +22,26 @@ then
         echo "Neither curl nor wget is available. Please install one of these to continue."
         exit 1
     fi
-else
-    echo "pyenv is already installed."
 fi
 
-# Install Python 3.11 if not already installed
-$pyenv_root install 3.11 --skip-existing
+# Initialize pyenv after installation
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
 
-# Check Python version
-installed_version=$($pyenv_root exec python3.11 --version)
-if [[ $installed_version != *"3.11"* ]]; then
-    echo "Python 3.11 was not installed correctly. Please open an issue at https://github.com/openinterpreter/universal-python/."
+# Install Python and remember the version
+python_version=3.11.9
+pyenv install $python_version --skip-existing
+
+# Explicitly use the installed Python version for commands
+installed_version=$(pyenv exec $python_version --version)
+echo "Installed Python version: $installed_version"
+if [[ $installed_version != *"$python_version"* ]]; then
+    echo "Python $python_version was not installed correctly. Please open an issue at https://github.com/openinterpreter/universal-python/."
     exit 1
 fi
 
-# Use pyenv exec to run pip install with the installed Python version
-$pyenv_root exec python3.11 -m pip install open-interpreter
+# Use the specific Python version to install open-interpreter
+pyenv exec $python_version -m pip install open-interpreter
 
 echo "Open Interpreter has been installed. Run the following command to use it:"
 echo "interpreter"
