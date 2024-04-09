@@ -58,13 +58,13 @@ fi
 
 
 # Initialize pyenv after installation
-eval "$($pyenv_root init --path)"
-eval "$($pyenv_root init -)"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
 
 # Install Python and remember the version
 python_version=3.11.9
-$pyenv_root install $python_version --skip-existing
-$pyenv_root shell $python_version
+pyenv install $python_version --skip-existing
+pyenv shell $python_version
 
 # Explicitly use the installed Python version for commands
 installed_version=$(pyenv exec python --version)
@@ -75,7 +75,7 @@ if [[ $installed_version != *"$python_version"* ]]; then
 fi
 
 # Use the specific Python version to install open-interpreter
-$pyenv_root exec python -m pip install open-interpreter
+pyenv exec python -m pip install open-interpreter
 
 echo "Open Interpreter has been installed. Run the following command to use it:"
 echo "interpreter"
