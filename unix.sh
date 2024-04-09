@@ -60,15 +60,6 @@ else
     fi
 fi
 
-echo "Continuing with the rest of the script..."
-# Add additional script logic here
-
-
-
-# Initialize pyenv after installation
-eval "$($pyenv_root init --path)"
-eval "$($pyenv_root init -)"
-
 # Install Python and remember the version
 python_version=3.11.9
 $pyenv_root install $python_version --skip-existing
