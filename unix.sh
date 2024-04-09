@@ -24,7 +24,7 @@ $pyenv_root install 3.11 --skip-existing
 # Check Python version
 installed_version=$($pyenv_root exec python3.11 --version)
 if [[ $installed_version != *"3.11"* ]]; then
-    echo "Python 3.11 is not installed correctly."
+    echo "Python 3.11 was not installed correctly. Please open an issue at https://github.com/openinterpreter/universal-python/."
     exit 1
 fi
 

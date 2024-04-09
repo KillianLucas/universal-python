@@ -20,24 +20,24 @@ jobs:
           #   script: powershell -ExecutionPolicy Bypass -File .\windows.ps1
           # - os: windows-2022
           #   script: powershell -ExecutionPolicy Bypass -File .\windows.ps1
-          # - os: ubuntu-18.04
-          #   script: chmod +x ./unix.sh && ./unix.sh
-          # - os: ubuntu-20.04
-          #   script: chmod +x ./unix.sh && ./unix.sh
-          # - os: ubuntu-latest
-          #   script: chmod +x ./unix.sh && ./unix.sh
-          # - os: ubuntu-latest
-          #   distro: debian:10
-          #   script: chmod +x ./unix.sh && ./unix.sh
-          # - os: ubuntu-latest
-          #   distro: debian:11
-          #   script: chmod +x ./unix.sh && ./unix.sh
-          # - os: ubuntu-latest
-          #   distro: centos:7
-          #   script: chmod +x ./unix.sh && ./unix.sh
-          # - os: ubuntu-latest
-          #   distro: centos:8
-          #   script: chmod +x ./unix.sh && ./unix.sh
+          - os: ubuntu-18.04
+            script: chmod +x ./unix.sh && ./unix.sh
+          - os: ubuntu-20.04
+            script: chmod +x ./unix.sh && ./unix.sh
+          - os: ubuntu-latest
+            script: chmod +x ./unix.sh && ./unix.sh
+          - os: ubuntu-latest
+            distro: debian:10
+            script: chmod +x ./unix.sh && ./unix.sh
+          - os: ubuntu-latest
+            distro: debian:11
+            script: chmod +x ./unix.sh && ./unix.sh
+          - os: ubuntu-latest
+            distro: centos:7
+            script: chmod +x ./unix.sh && ./unix.sh
+          - os: ubuntu-latest
+            distro: centos:8
+            script: chmod +x ./unix.sh && ./unix.sh
 
     runs-on: ${{ matrix.os }}
 
