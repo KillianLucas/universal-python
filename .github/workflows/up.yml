@@ -26,7 +26,6 @@ jobs:
             script: ./unix.sh
           - os: ubuntu-latest
             script: ./unix.sh
-          # Using Docker for specific Linux distributions and versions
           - os: ubuntu-latest
             distro: debian:10
             script: ./unix.sh
@@ -55,7 +54,7 @@ jobs:
           cd /workspace
           ${{ matrix.script }}
 
-    - name: Run script on macOS and Windows
-      if: matrix.os != 'ubuntu-latest' || matrix.distro == ''
+    - name: Run script on non-Docker environments
+      if: matrix.distro == ''
       run: ${{ matrix.script }}
-      shell: ${{ matrix.os == 'windows-latest' || matrix.os == 'windows-2019' || matrix.os == 'windows-2022' ? 'pwsh' : 'bash' }}
+      shell: ${{ contains(matrix.os, 'windows') && 'pwsh' || 'bash' }}
