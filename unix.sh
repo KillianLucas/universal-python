@@ -33,7 +33,7 @@ python_version=3.11.9
 pyenv install $python_version --skip-existing
 
 # Explicitly use the installed Python version for commands
-installed_version=$(pyenv exec $python_version --version)
+installed_version=$(pyenv exec python$python_version --version)
 echo "Installed Python version: $installed_version"
 if [[ $installed_version != *"$python_version"* ]]; then
     echo "Python $python_version was not installed correctly. Please open an issue at https://github.com/openinterpreter/universal-python/."
