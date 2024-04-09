@@ -9,35 +9,35 @@ jobs:
       matrix:
         include:
           - os: macos-10.15
-            script: ./unix.sh
+            script: chmod +x ./unix.sh && ./unix.sh
           - os: macos-11
-            script: ./unix.sh
+            script: chmod +x ./unix.sh && ./unix.sh
           - os: macos-12
-            script: ./unix.sh
+            script: chmod +x ./unix.sh && ./unix.sh
           - os: windows-2016
-            script: .\windows.ps1
+            script: powershell -ExecutionPolicy Bypass -File .\windows.ps1
           - os: windows-2019
-            script: .\windows.ps1
+            script: powershell -ExecutionPolicy Bypass -File .\windows.ps1
           - os: windows-2022
-            script: .\windows.ps1
+            script: powershell -ExecutionPolicy Bypass -File .\windows.ps1
           - os: ubuntu-18.04
-            script: ./unix.sh
+            script: chmod +x ./unix.sh && ./unix.sh
           - os: ubuntu-20.04
-            script: ./unix.sh
+            script: chmod +x ./unix.sh && ./unix.sh
           - os: ubuntu-latest
-            script: ./unix.sh
+            script: chmod +x ./unix.sh && ./unix.sh
           - os: ubuntu-latest
             distro: debian:10
-            script: ./unix.sh
+            script: chmod +x ./unix.sh && ./unix.sh
           - os: ubuntu-latest
             distro: debian:11
-            script: ./unix.sh
+            script: chmod +x ./unix.sh && ./unix.sh
           - os: ubuntu-latest
             distro: centos:7
-            script: ./unix.sh
+            script: chmod +x ./unix.sh && ./unix.sh
           - os: ubuntu-latest
             distro: centos:8
-            script: ./unix.sh
+            script: chmod +x ./unix.sh && ./unix.sh
 
     runs-on: ${{ matrix.os }}
 
